@@ -1,0 +1,22 @@
+{
+  "name": "xntools",
+  "version": "1.0.0",
+  "description": "页面质量检测",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.intra.weibo.com/deer/xntools.git"
+  },
+  "author": "galaa2011",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "lighthouse": "^2.9.2",
+    "mysql": "^2.15.0",
+    "node-fetch": "^2.1.1",
+    "shelljs": "^0.8.1"
+  }
+}
