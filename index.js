@@ -1,21 +1,21 @@
 const express = require('express')
 const audits = require('./audits')
-const mysql = require('mysql')
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: '10.210.228.89',
-  port: 3307,
-  user: 'root',
-  password: '123456',
-  database: 'smart'
-});
-pool.getConnection((err, connection) => {
-  connection.query('SELECT * FROM tag LIMIT 100;', (error, results, fields) => {
-    console.log(results)
-    connection.release();
-    if (error) throw error;
-  });
-});
+// const mysql = require('mysql')
+// const pool = mysql.createPool({
+//   connectionLimit: 10,
+//   host: '10.210.228.89',
+//   port: 3307,
+//   user: 'root',
+//   password: '123456',
+//   database: 'smart'
+// });
+// pool.getConnection((err, connection) => {
+//   connection.query('SELECT * FROM tag LIMIT 100;', (error, results, fields) => {
+//     console.log(results)
+//     connection.release();
+//     if (error) throw error;
+//   });
+// });
 
 const app = express()
 app.all('*', (req, res, next) => {
@@ -25,9 +25,9 @@ app.all('*', (req, res, next) => {
   next()
 })
 
-app.get('/node-server/audits', (req, res) => {
+app.get('/audits/run', (req, res) => {
   try {
-    audits(req.query.url, req)
+    audits(req.query, req)
     res.send({status: 200, time: +new Date})
   } catch (error) {
     res.send({

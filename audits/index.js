@@ -43,20 +43,21 @@ const opts = {
   chromeFlags: ['--headless']
 };
 
-module.exports = function audits (url, req) {
-  launchChromeAndRunLighthouse(url, opts, config).then(results => {
-    // console.log(results)
-    fetch('http://local.sina.com.cn:8090/s/tag/list?parentId=1', {
-      headers:{
+module.exports = function audits (query, req) {
+  launchChromeAndRunLighthouse(query.url, opts, config).then(results => {
+    fetch('http://local.sina.com.cn:8090/s/audits/update?score=99&status=1&id=' + query.id, {
+      method: 'POST',
+      headers: {
         cookie: req.headers.cookie,
       },
       // credentials: 'include'
+      body: JSON.stringify({file: results})
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res)
-        fs.writeFile(__dirname + `/response.json`, JSON.stringify(res, null, 2), 'utf8', err => {});
+        // console.log(res)
+        // fs.writeFile(__dirname + `/response.json`, JSON.stringify(res, null, 2), 'utf8', err => {});
       })
-    fs.writeFile(__dirname + `/report.json`, JSON.stringify(results, null, 2), 'utf8', err => {});
+    // fs.writeFile(__dirname + `/report.json`, JSON.stringify(results, null, 2), 'utf8', err => {});
   });
 }
