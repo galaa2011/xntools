@@ -1,30 +1,6 @@
-// var shell = require('shelljs');
-// const configs = [
-//   '--config-path=config.js',
-//   '--output json',
-//   '--output-path ./report.json',
-//   '--chrome-flags="--headless"'
-// ]
-// shell.exec('lighthouse --config-path=config.js --chrome-flags="--headless" http://sinaluming.com/z/1754/ --output json  --output-path ./report.json', function(code, stdout, stderr) {
-//   console.log(stdout)
-// });
-// if (!shell.which('git')) {
-//   shell.echo('Sorry, this script requires git');
-//   shell.exit(1);
-// }
 const fetch = require('node-fetch');
 const fs = require('fs');
 const config = require('./config.js');
-// const lighthouse = require('lighthouse');
-// const {Launcher} = require('lighthouse/chrome-launcher');
-// const launcher = new Launcher({port: 9222});
-// launcher.launch()
-//   .then(() => lighthouse('http://sinaluming.com/z/1754/', {port: 9222}, config))
-//   .then(result => {
-//     console.log(result);
-//     fs.writeFile(__dirname + `/report2.json`, JSON.stringify(result, null, 2), 'utf8', err => {});
-//     launcher.kill();
-//   });
 
 const lighthouse = require('lighthouse');
 const chromeLauncher = require('chrome-launcher');
@@ -40,11 +16,12 @@ function launchChromeAndRunLighthouse(url, opts, config = null) {
   });
 }
 const opts = {
-  chromeFlags: ['--headless']
+  chromeFlags: ['--disable-gpu', '--headless', '--no-sandbox']
 };
 
 module.exports = function audits (query, req) {
   launchChromeAndRunLighthouse(query.url, opts, config).then(results => {
+    console.log(query, results)
     fetch('http://local.sina.com.cn:8090/s/audits/update?score=99&status=1&id=' + query.id, {
       method: 'POST',
       headers: {
