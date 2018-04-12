@@ -22,7 +22,7 @@ const opts = {
 module.exports = function audits (query, req) {
   launchChromeAndRunLighthouse(query.url, opts, config).then(results => {
     console.log(query, results)
-    fetch('http://local.sina.com.cn:8090/s/audits/update?score=99&status=1&id=' + query.id, {
+    fetch('http://10.210.228.89/s/audits/update?status=1&id=' + query.id, {
       method: 'POST',
       headers: {
         cookie: req.headers.cookie,

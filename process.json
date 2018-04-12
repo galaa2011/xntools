@@ -1,0 +1,10 @@
+{
+  "apps": [{
+    "name": "xntools",
+    "max_memory_restart": "300M",
+    "script": "index.js",
+    "instances": 3,
+    "exec_mode": "cluster",
+    "log_date_format": "YYYY-MM-DD HH:mm Z"
+  }]
+}
