@@ -17,6 +17,10 @@ module.exports = function (data) {
     }
   })
   return Promise.all(_all).then(allColors => {
+    if (allColors.length === 1) {
+      data.audits['first-paint'] = {rawValue: data.audits['screenshot-thumbnails'].details.items[0].timing}
+      return
+    }
     allColors.forEach((colors, i) => {
       if (colors.length >= 1 && colors[0].color.toLowerCase() !== 'ffffff' && !data.audits['first-paint']) {
         data.audits['first-paint'] = {rawValue: data.audits['screenshot-thumbnails'].details.items[i - 1].timing}
