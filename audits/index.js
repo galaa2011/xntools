@@ -4,6 +4,7 @@ const config = require('./config.js');
 
 const lighthouse = require('lighthouse');
 const chromeLauncher = require('chrome-launcher');
+const firstPaint = require('./first-paint');
 
 function launchChromeAndRunLighthouse(url, opts, config = null) {
   return chromeLauncher.launch({chromeFlags: opts.chromeFlags}).then(chrome => {
@@ -21,20 +22,21 @@ const opts = {
 
 module.exports = function audits (query, req) {
   launchChromeAndRunLighthouse(query.url, opts, config).then(results => {
-    console.log(query, results)
-    fetch('http://10.210.228.89/s/audits/update?status=1&id=' + query.id, {
-      method: 'POST',
-      headers: {
-        cookie: req.headers.cookie,
-      },
-      // credentials: 'include'
-      body: JSON.stringify({file: results})
-    })
-      .then(res => res.json())
-      .then(res => {
-        // console.log(res)
-        // fs.writeFile(__dirname + `/response.json`, JSON.stringify(res, null, 2), 'utf8', err => {});
+    firstPaint(results).then(() => {
+      fetch('http://10.210.228.89/s/audits/update?status=1&id=' + query.id, {
+        method: 'POST',
+        headers: {
+          cookie: req.headers.cookie,
+        },
+        // credentials: 'include'
+        body: JSON.stringify({file: results})
       })
-    // fs.writeFile(__dirname + `/report.json`, JSON.stringify(results, null, 2), 'utf8', err => {});
+        .then(res => res.json())
+        .then(res => {
+          // console.log(res)
+          // fs.writeFile(__dirname + `/response.json`, JSON.stringify(res, null, 2), 'utf8', err => {});
+        })
+      // fs.writeFile(__dirname + `/report.json`, JSON.stringify(results, null, 2), 'utf8', err => {});
+    })
   });
 }
