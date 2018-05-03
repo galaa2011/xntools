@@ -21,13 +21,13 @@ const opts = {
 };
 
 module.exports = function audits (query, req) {
-  launchChromeAndRunLighthouse(query.url, opts, config).then(results => {
-    firstPaint(results).then(() => {
+  return launchChromeAndRunLighthouse(query.url, opts, config).then(results => {
+    return firstPaint(results).then(() => {
       let status = 1
       if (results.audits['first-interactive'].score === null || results.audits['first-meaningful-paint'].score === null) {
         status = 2
       }
-      fetch(`http://10.210.228.89/s/audits/update?status=${status}&id=${query.id}`, {
+      return fetch(`http://10.210.228.89/s/audits/update?status=${status}&id=${query.id}`, {
         method: 'POST',
         headers: {
           cookie: req.headers.cookie,

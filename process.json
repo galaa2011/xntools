@@ -5,6 +5,7 @@
     "script": "index.js",
     "instances": 3,
     "exec_mode": "cluster",
+    "log_type": "json",
     "log_date_format": "YYYY-MM-DD HH:mm Z"
   }]
 }
