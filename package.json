@@ -16,6 +16,6 @@
     "express": "^4.16.3",
     "lighthouse": "^2.9.2",
     "node-fetch": "^2.1.1",
-    "thmclrx": "^1.0.0"
+    "thmclrx": "git+https://github.com/galaa2011/thmclrx.git"
   }
 }
