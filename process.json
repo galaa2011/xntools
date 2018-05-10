@@ -5,7 +5,9 @@
     "script": "index.js",
     "instances": 3,
     "exec_mode": "cluster",
-    "log_type": "json",
+    "cwd": "./",
+    "out_file": "./logs/xntools-out.log",
+    "error_file": "./logs/xntools-err.log",
     "log_date_format": "YYYY-MM-DD HH:mm Z",
     "watch": ["package.json"]
   }]
