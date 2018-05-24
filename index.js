@@ -11,7 +11,7 @@ app.all('*', (req, res, next) => {
 
 app.get('/audits/run', (req, res) => {
   try {
-    audits(req.query, req).catch(e => {})
+    audits(req.query, req).catch(e => {console.error(e)})
     res.send({status: 200, time: +new Date})
   } catch (error) {
     res.send({
