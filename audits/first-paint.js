@@ -3,7 +3,7 @@ let thmclrx = require("thmclrx");
 module.exports = function (data) {
   let _all = []
   let fmp = data.audits['first-meaningful-paint']
-  data.audits['screenshot-thumbnails'].details.items.forEach(item => {
+  data.audits['screenshot-thumbnails'].details && data.audits['screenshot-thumbnails'].details.items.forEach(item => {
     if (fmp.rawValue < 0 || item.timing < fmp.rawValue) {
       _all.push(new Promise((resolve, reject) => {
         let buffer = new Buffer(item.data, 'base64')
@@ -18,6 +18,10 @@ module.exports = function (data) {
     }
   })
   return Promise.all(_all).then(allColors => {
+    if (allColors.length === 0) {
+      data.audits['first-paint'] = {rawValue: fmp.rawValue || 100};
+      return
+    }
     if (allColors.length === 1) {
       data.audits['first-paint'] = {rawValue: data.audits['screenshot-thumbnails'].details.items[0].timing}
       return

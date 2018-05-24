@@ -3,6 +3,7 @@ const fs = require('fs');
 const config = require('./config.js');
 
 const lighthouse = require('lighthouse');
+const log = require('lighthouse-logger');
 const chromeLauncher = require('chrome-launcher');
 const firstPaint = require('./first-paint');
 
@@ -17,11 +18,14 @@ function launchChromeAndRunLighthouse(url, opts, config = null) {
   });
 }
 const opts = {
-  disableDeviceEmulation: true,
-  disableCpuThrottling: true,
-  disableNetworkThrottling: true,
+  logLevel: 'info',
+  // output: 'json',
+  // disableDeviceEmulation: true,
+  // disableCpuThrottling: true,
+  // disableNetworkThrottling: true,
   chromeFlags: ['--disable-gpu', '--headless', '--no-sandbox']
 };
+log.setLevel(opts.logLevel);
 
 module.exports = function audits (query, req) {
   return launchChromeAndRunLighthouse(query.url, opts, config).then(results => {
@@ -40,6 +44,7 @@ module.exports = function audits (query, req) {
       })
         .then(res => res.json())
         .then(res => {
+          return res;
           // fs.writeFile(__dirname + `/response.json`, JSON.stringify(res, null, 2), 'utf8', err => {});
         })
       // fs.writeFile(__dirname + `/report.json`, JSON.stringify(results, null, 2), 'utf8', err => {});

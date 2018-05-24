@@ -11,8 +11,8 @@ app.all('*', (req, res, next) => {
 
 app.get('/audits/run', (req, res) => {
   try {
-    audits(req.query, req).catch(e => {console.error(e)})
-    res.send({status: 200, time: +new Date})
+    audits(req.query, req).then(res => {console.log(res)}).catch(e => {console.error(e)});
+    res.send({status: 200, time: +new Date, message: '成功'});
   } catch (error) {
     res.send({
       status: 500,
