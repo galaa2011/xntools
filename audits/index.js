@@ -17,6 +17,9 @@ function launchChromeAndRunLighthouse(url, opts, config = null) {
   });
 }
 const opts = {
+  disableDeviceEmulation: true,
+  disableCpuThrottling: true,
+  disableNetworkThrottling: true,
   chromeFlags: ['--disable-gpu', '--headless', '--no-sandbox']
 };
 
