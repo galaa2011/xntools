@@ -28,7 +28,10 @@ module.exports = function (data) {
     }
     allColors.forEach((colors, i) => {
       if (colors.length >= 1 && colors[0].color.toLowerCase() !== 'ffffff' && !data.audits['first-paint']) {
-        data.audits['first-paint'] = {rawValue: data.audits['screenshot-thumbnails'].details.items[i - 1].timing}
+        data.audits['first-paint'] = {
+          rawValue: data.audits['screenshot-thumbnails'].details.items[i - 1].timing,
+          nextTiming: data.audits['screenshot-thumbnails'].details.items[i].timing
+        }
       }
       if (i === allColors.length - 1 && !data.audits['first-paint']) {
         data.audits['first-paint'] = {rawValue: data.audits['screenshot-thumbnails'].details.items[i - 1].timing}

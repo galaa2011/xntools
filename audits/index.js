@@ -30,9 +30,24 @@ log.setLevel(opts.logLevel);
 module.exports = function audits (query, req) {
   return launchChromeAndRunLighthouse(query.url, opts, config).then(results => {
     return firstPaint(results).then(() => {
+      let fp = results.audits['first-paint'];
+      let fmp = results.audits['first-meaningful-paint'];
+      let fi = results.audits['first-interactive'];
+      let st = results.audits['screenshot-thumbnails'];
       let status = 1
-      if (results.audits['first-interactive'].score === null || results.audits['first-meaningful-paint'].score === null) {
-        status = 2
+      if (fmp.score === null || isNaN(fmp.score)) {
+        if (st.details && st.details.items && st.details.items.length) {
+          fmp.rawValue = fp.nextTiming || (st.details.scale - (st.details.scale - fp.rawValue) / 2);
+        } else {
+          status = 2
+        }
+      }
+      if (fi.score === null || isNaN(fi.score)) {
+        if (st.details && st.details.items && st.details.items.length) {
+          fi.rawValue = st.details.scale;
+        } else {
+          status = 2
+        }
       }
       return fetch(`http://10.210.228.89/s/audits/update?status=${status}&id=${query.id}`, {
         method: 'POST',
