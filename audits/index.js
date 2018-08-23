@@ -14,6 +14,8 @@ function launchChromeAndRunLighthouse(url, opts, config = null) {
       // The gathered artifacts are typically removed as they can be quite large (~50MB+)
       delete results.artifacts;
       return chrome.kill().then(() => results);
+    }).catch(e => {
+      chrome.kill().then(() => e);
     });
   });
 }
